@@ -5,15 +5,15 @@ allPlots = findall(0, 'Type', 'figure', 'FileName', []);
 delete(allPlots);
 
 N = 5;                  %number of Fourier orders
-period = 497*(10^(-9));  %period of periodic layer
-w = 180*(10^(-9));        %ridge width
-L = 3;                   %number of layers
+period = 1400*(10^(-9));  %period of periodic layer
+w = 1000*(10^(-9));        %ridge width
+L = 1;                   %number of layers
 
 h = zeros(L,1);
 
-h(1) = 70*10^(-9);       %thickness of periodic layer
-h(2) = 20*10^(-9);
-h(3) = 1*10^(-6);
+h(1) = 1000*10^(-9);       %thickness of periodic layer
+%h(2) = 20*10^(-9);
+%h(3) = 1*10^(-6);
 
 %{
 h(1) = 90*10^(-9);
@@ -22,25 +22,30 @@ h(2) = 1*10^(-6);
 M = 5001;              
 x = (1:1:M)*period/M;
 epsilon = zeros(M, L);
-%nTa2O5 = 2.1+0.0001*1j;
-nTa2O5 = 2.1;
-epsTa2O5 = nTa2O5^2;
-nSiO2 = 1.48;
+
+%nSi = 3.71;
+
+nSiO2 = 1.45;
 epsSiO2 = nSiO2^2;
-nSi = 3.71;
-epsilon(:,1)=epsTa2O5*ones(M,1);
-epsilon(:,2)=epsTa2O5*ones(M,1);
-epsilon(:,3)=epsSiO2*ones(M,1);
+
+n_resist = 1.53;
+eps_resist = n_resist^2;
+
+n_air = 1.0;
+eps_air = 1.0;
+
+%lowest layer has nlayer=L, top layer has nlayer=1
+epsilon(:,1)=eps_air*ones(M,1);
 for i=1:M    
     if x(i)<=w     
-      epsilon(i,1) = 1.0;
+      epsilon(i,1) = eps_resist;
     end
 end
-refIndices = [1.0 nSi];     
+refIndices = [n_air n_air];     
 
-lmin = 600*10^(-9);
-lmax = 1000*10^(-9);
-lambda = linspace(lmin, lmax, 2500);
+lmin = 1350*10^(-9);
+lmax = 1700*10^(-9);
+lambda = linspace(lmin, lmax, 1500);
 [Nll,Nl] = size(lambda);
 %theta = 0*pi/180;
 %Nt = 1;
@@ -76,6 +81,7 @@ for i=1:Nl
 end
 
 %%%%%%%%%%non-etched%%%%%%%%%%%%%%%%%%%%%%%%%%
+%{
 Rsum_non=zeros(Nl,Nt);
 Tsum_non=zeros(Nl,Nt);
 epsilon(:,1)=epsTa2O5*ones(M,1);
@@ -95,7 +101,8 @@ for i=1:Nl
     end
     end
 end
-Rsum = Rsum./Rsum_non;
+Rsum_normed = Rsum./Rsum_non;
+%}
 %{
 for i=1:Nl
    Rsum_Fano(i,1)=Rsum(i,1)-Rsum_nonperiodic(i,1);
@@ -188,29 +195,31 @@ hold off
 lambda = lambda*10^6;
 lmin = lmin*10^6;
 lmax = lmax*10^6;
-figure(5)
+%{
+figure(1)
 hold on
-plot(lambda, Rsum(:,1), 'b', lambda, Rsum(:,2)+5, 'g', lambda, Rsum(:,3)+10, 'r', lambda, Rsum(:,4)+15, 'm', 'LineWidth', 2)
-%plot(lambda, Rsum(:,1), 'b', 'LineWidth', 2)
-%h5 = legend('theta=0','theta=1','theta=2','theta=3',4);
+plot(lambda, Rsum_normed(:,1), 'b', lambda, Rsum_normed(:,2)+5, 'g', lambda, Rsum_normed(:,3)+10,'r',...
+    lambda, Rsum_normed(:,4)+15, 'm', 'LineWidth', 2)
 h5 = legend('theta=0.1 deg','theta=1 deg','theta=3 deg','theta=10 deg',4);
 set(h5,'Interpreter','none')
-%title('W=',w*10^9,' nm, D=', period*10^9,' nm')
 axis tight
 ax = gca;
 ax.XAxis.MinorTick = 'on';
-%axis([lmin lmax 0 2.5])
-%set(gca,'Xtick',0.6:0.025:1)
-%grid minor
-%set(gca,'XtickLabel',lambda(0.6:0.025:end))
+xlabel('lambda, mkm')
+ylabel('R_normed')
+set(gca,'fontsize', 16)
+%}
+figure(1)
+plot(lambda, Rsum(:,1), 'b', lambda, Rsum(:,2)+0.5, 'g', lambda, Rsum(:,3)+1.0,'r',...
+    lambda, Rsum(:,4)+1.5, 'm', 'LineWidth', 2)
+h5 = legend('theta=0.1 deg','theta=1 deg','theta=3 deg','theta=10 deg',4);
+set(h5,'Interpreter','none')
+axis tight
+ax = gca;
+ax.XAxis.MinorTick = 'on';
 xlabel('lambda, mkm')
 ylabel('R')
-%set(haxes(1),'XLim',[Min Max],'YLim',[MinV MaxV]);
-%Sets Range set(haxes(2),'Xlim',[Min Max],'YLim',[MinI MaxI]);
 set(gca,'fontsize', 16)
-%xticks([0.6 0.025 1])
-%xticks([lmin lmin+0.01 lmax])
-%yticks([-1 0 1])
-%datetick('x', 'yyyy', 'keepticks');
+
 hold off
 
