@@ -39,8 +39,8 @@ end
 refIndices = [1.0 nSi];     
 
 lmin = 600*10^(-9);
-lmax = 1000*10^(-9);
-lambda = linspace(lmin, lmax, 2500);
+lmax = 800*10^(-9);
+lambda = linspace(lmin, lmax, 2000);
 [Nll,Nl] = size(lambda);
 %theta = 0*pi/180;
 %Nt = 1;
@@ -51,8 +51,8 @@ lambda = linspace(lmin, lmax, 2500);
 %[Ntt, Nt] = size(theta);
 
 
-theta = [0.1 1 3 10]*pi/180;
-Nt=4;
+theta = [7 8 9 10 13]*pi/180;
+Nt=5;
 
 phi = 0*pi/180;
 Rsum=zeros(Nl,Nt);
@@ -190,9 +190,9 @@ lmin = lmin*10^6;
 lmax = lmax*10^6;
 figure(1)
 hold on
-plot(lambda, Rsum_normed(:,1), 'b', lambda, Rsum_normed(:,2)+5, 'g', lambda, Rsum_normed(:,3)+10,'r',...
-    lambda, Rsum_normed(:,4)+15, 'm', 'LineWidth', 2)
-h5 = legend('theta=0.1 deg','theta=1 deg','theta=3 deg','theta=10 deg',4);
+plot(lambda, Rsum_normed(:,1), 'b', lambda, Rsum_normed(:,2)+5, 'g', lambda, Rsum_normed(:,3)+10,'m',...
+    lambda, Rsum_normed(:,4)+15, 'c', lambda, Rsum_normed(:,5)+20, 'k', 'LineWidth', 2)
+h5 = legend('theta=7 deg','theta=8 deg','theta=9 deg','theta=10 deg','theta=13 deg', 5);
 set(h5,'Interpreter','none')
 axis tight
 ax = gca;
@@ -202,9 +202,9 @@ ylabel('R_normed')
 set(gca,'fontsize', 16)
 
 figure(2)
-plot(lambda, Rsum(:,1), 'b', lambda, Rsum(:,2)+0.5, 'g', lambda, Rsum(:,3)+1.0,'r',...
-    lambda, Rsum(:,4)+1.5, 'm', 'LineWidth', 2)
-h5 = legend('theta=0.1 deg','theta=1 deg','theta=3 deg','theta=10 deg',4);
+plot(lambda, Rsum(:,1), 'b', lambda, Rsum(:,2)+0.5, 'g', lambda, Rsum(:,3)+1.0,'m',...
+    lambda, Rsum(:,4)+1.5, 'c', lambda, Rsum(:,5)+2.0, 'k', 'LineWidth', 2)
+h5 = legend('theta=7 deg','theta=8 deg','theta=9 deg','theta=10 deg','theta=13 deg', 5);
 set(h5,'Interpreter','none')
 axis tight
 ax = gca;
