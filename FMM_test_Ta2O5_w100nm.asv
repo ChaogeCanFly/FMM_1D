@@ -4,16 +4,16 @@ allPlots = findall(0, 'Type', 'figure', 'FileName', []);
 % Close.
 delete(allPlots);
 
-N = 3;                  %number of Fourier orders
-period = 1300*(10^(-9));  %period of periodic layer
-w = 1050*(10^(-9));        %ridge width
-L = 1;                   %number of layers
+N = 5;                  %number of Fourier orders
+period = 497*(10^(-9));  %period of periodic layer
+w = 180*(10^(-9));        %ridge width
+L = 3;                   %number of layers
 
 h = zeros(L,1);
 
-h(1) = 700*10^(-9);       %thickness of periodic layer
-%h(2) = 20*10^(-9);
-%h(3) = 1*10^(-6);
+h(1) = 70*10^(-9);       %thickness of periodic layer
+h(2) = 20*10^(-9);
+h(3) = 1*10^(-6);
 
 %{
 h(1) = 90*10^(-9);
@@ -22,46 +22,37 @@ h(2) = 1*10^(-6);
 M = 5001;              
 x = (1:1:M)*period/M;
 epsilon = zeros(M, L);
-
-%nSi = 3.71;
-
-nSiO2 = 1.45;
+%nTa2O5 = 2.1+0.0001*1j;
+nTa2O5 = 2.1;
+epsTa2O5 = nTa2O5^2;
+nSiO2 = 1.48;
 epsSiO2 = nSiO2^2;
-
-n_resist = 1.53;
-eps_resist = n_resist^2;
-
-n_air = 1.0;
-eps_air = 1.0;
-
-%lowest layer has nlayer=L, top layer has nlayer=1
-epsilon(:,1)=eps_air*ones(M,1);
+nSi = 3.71;
+epsilon(:,1)=epsTa2O5*ones(M,1);
+epsilon(:,2)=epsTa2O5*ones(M,1);
+epsilon(:,3)=epsSiO2*ones(M,1);
 for i=1:M    
     if x(i)<=w     
-      epsilon(i,1) = eps_resist;
+      epsilon(i,1) = 1.0;
     end
 end
-refIndices = [n_air nSiO2];     
+refIndices = [1.0 nSi];     
 
-lmin = 1302*10^(-9);
-lmax = 1400*10^(-9);
-thetamin = 0*pi/180;
-thetamax = 5*pi/180;
-lambda = linspace(lmin, lmax, 300);
+lmin = 400*10^(-9);
+lmax = 1000*10^(-9);
+lambda = linspace(lmin, lmax, 601);
 [Nll,Nl] = size(lambda);
-theta = linspace(thetamin,thetamax,15);
-[Ntt,Nt] = size(theta);
 %theta = 0*pi/180;
 %Nt = 1;
 
-%thetamin = 0;
-%thetamax=1.0*pi/180;
-%theta = linspace(thetamin, thetamax,70);
-%[Ntt, Nt] = size(theta);
+thetamin = 0.1*pi/180;
+thetamax= 20.0*pi/180;
+theta = linspace(thetamin, thetamax, 200);
+[Ntt, Nt] = size(theta);
 
 
-%theta = [0.1 1 3 10]*pi/180;
-%Nt=4;
+%theta = [7 8 9 10 13]*pi/180;
+%Nt=5;
 
 phi = 0*pi/180;
 Rsum=zeros(Nl,Nt);
@@ -80,10 +71,39 @@ for i=1:Nl
     period, h, lambda(i), theta(j), phi(k), refIndices, N, M, L);
     Rsum(i,j) = sum(eta_R1);
     Tsum(i,j) = sum(eta_T1);
+    lambda(i)
     end
     end
 end
 
+figure(4);
+pcolor(theta*180/pi,lambda*10^9,Rsum)
+
+save('sample_497_180_map.mat','theta','lambda','Rsum')
+
+ylabel('lambda, mkm');
+xlabel('theta, deg');
+colormap('gray');
+colorbar;
+set(gca,'fontsize', 16)
+shading flat
+caxis([0 1])
+colorbar
+hold off
+
+c = physconst('LightSpeed');
+h = 4.135 666 * 10^(-15);
+lambda = lambda*(10^(-9));
+
+%{
+for i = 1:Nl
+    for j=1:Nt
+        omega(i) = 2*pi*c/lambda(i);
+        k0(i) = 2*pi*1000/lambda(i); %mkm
+        kx(i,j) = k0(i)*sin(theta(j));
+    end
+end
+%}
 %%%%%%%%%%non-etched%%%%%%%%%%%%%%%%%%%%%%%%%%
 %{
 Rsum_non=zeros(Nl,Nt);
@@ -197,26 +217,15 @@ set(gca,'fontsize', 18)
 hold off
 %}
 
+%{
 lambda = lambda*10^6;
 lmin = lmin*10^6;
 lmax = lmax*10^6;
-tl = linspace(lmin,lmax,400);
-tt = linspace(thetamin, thetamax,30)*180/pi;
-[XI,YI] = meshgrid(tl,tt);
-ZI = griddata(theta*180/pi,lambda,Rsum,YI,XI);
-figure;
-pcolor(XI,YI,ZI)
-shading flat
-colormap('jet');
-colorbar;
-hold off
-
-%{
 figure(1)
 hold on
-plot(lambda, Rsum_normed(:,1), 'b', lambda, Rsum_normed(:,2)+5, 'g', lambda, Rsum_normed(:,3)+10,'r',...
-    lambda, Rsum_normed(:,4)+15, 'm', 'LineWidth', 2)
-h5 = legend('theta=0.1 deg','theta=1 deg','theta=3 deg','theta=10 deg',4);
+plot(lambda, Rsum_normed(:,1), 'b', lambda, Rsum_normed(:,2)+5, 'g', lambda, Rsum_normed(:,3)+10,'m',...
+    lambda, Rsum_normed(:,4)+15, 'c', lambda, Rsum_normed(:,5)+20, 'k', 'LineWidth', 2)
+h5 = legend('theta=7 deg','theta=8 deg','theta=9 deg','theta=10 deg','theta=13 deg', 5);
 set(h5,'Interpreter','none')
 axis tight
 ax = gca;
@@ -224,12 +233,11 @@ ax.XAxis.MinorTick = 'on';
 xlabel('lambda, mkm')
 ylabel('R_normed')
 set(gca,'fontsize', 16)
-%}
-%{
-figure(1)
-plot(lambda, Rsum(:,1), 'b', lambda, Rsum(:,2)+0.5, 'g', lambda, Rsum(:,3)+1.0,'r',...
-    lambda, Rsum(:,4)+1.5, 'm', 'LineWidth', 2)
-h5 = legend('theta=0.1 deg','theta=1 deg','theta=3 deg','theta=10 deg',4);
+
+figure(2)
+plot(lambda, Rsum(:,1), 'b', lambda, Rsum(:,2)+0.5, 'g', lambda, Rsum(:,3)+1.0,'m',...
+    lambda, Rsum(:,4)+1.5, 'c', lambda, Rsum(:,5)+2.0, 'k', 'LineWidth', 2)
+h5 = legend('theta=7 deg','theta=8 deg','theta=9 deg','theta=10 deg','theta=13 deg', 5);
 set(h5,'Interpreter','none')
 axis tight
 ax = gca;

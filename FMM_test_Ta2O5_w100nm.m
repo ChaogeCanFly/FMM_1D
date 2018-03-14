@@ -38,21 +38,21 @@ for i=1:M
 end
 refIndices = [1.0 nSi];     
 
-lmin = 600*10^(-9);
-lmax = 800*10^(-9);
-lambda = linspace(lmin, lmax, 2000);
+lmin = 400*10^(-9);
+lmax = 1000*10^(-9);
+lambda = linspace(lmin, lmax, 601);
 [Nll,Nl] = size(lambda);
 %theta = 0*pi/180;
 %Nt = 1;
 
-%thetamin = 0;
-%thetamax=1.0*pi/180;
-%theta = linspace(thetamin, thetamax,70);
-%[Ntt, Nt] = size(theta);
+thetamin = 0.1*pi/180;
+thetamax= 20.0*pi/180;
+theta = linspace(thetamin, thetamax, 200);
+[Ntt, Nt] = size(theta);
 
 
-theta = [7 8 9 10 13]*pi/180;
-Nt=5;
+%theta = [7 8 9 10 13]*pi/180;
+%Nt=5;
 
 phi = 0*pi/180;
 Rsum=zeros(Nl,Nt);
@@ -71,11 +71,54 @@ for i=1:Nl
     period, h, lambda(i), theta(j), phi(k), refIndices, N, M, L);
     Rsum(i,j) = sum(eta_R1);
     Tsum(i,j) = sum(eta_T1);
+    lambda(i)
     end
     end
 end
 
+
+
+save('sample_497_180_map.mat','theta','lambda','Rsum')
+
+figure(1);
+pcolor(theta*180/pi,lambda*10^9,Rsum)
+ylabel('lambda, nm');
+xlabel('theta, deg');
+colormap('gray');
+colorbar;
+set(gca,'fontsize', 16)
+shading flat
+caxis([0 1])
+colorbar
+hold off
+
+c = physconst('LightSpeed');
+h = 4.135666 * 10^(-15);
+kx = (2*pi*10^(-6)./lambda)'*sin(theta);
+energy = (h*c./lambda');
+
+figure(2);
+pcolor(kx,energy,Rsum)
+xlabel('kx, mkm^{-1}');
+ylabel('energy, eV');
+colormap('gray');
+colorbar;
+set(gca,'fontsize', 16)
+shading flat
+caxis([0 1])
+colorbar
+hold off
+%{
+for i = 1:Nl
+    for j=1:Nt
+        omega(i) = 2*pi*c/lambda(i);
+        k0(i) = 2*pi*1000/lambda(i); %mkm
+        kx(i,j) = k0(i)*sin(theta(j));
+    end
+end
+%}
 %%%%%%%%%%non-etched%%%%%%%%%%%%%%%%%%%%%%%%%%
+%{
 Rsum_non=zeros(Nl,Nt);
 Tsum_non=zeros(Nl,Nt);
 epsilon(:,1)=epsTa2O5*ones(M,1);
@@ -96,6 +139,7 @@ for i=1:Nl
     end
 end
 Rsum_normed = Rsum./Rsum_non;
+%}
 %{
 for i=1:Nl
    Rsum_Fano(i,1)=Rsum(i,1)-Rsum_nonperiodic(i,1);
@@ -185,6 +229,8 @@ axis([lmin lmax 0 1])
 set(gca,'fontsize', 18)
 hold off
 %}
+
+%{
 lambda = lambda*10^6;
 lmin = lmin*10^6;
 lmax = lmax*10^6;
@@ -214,4 +260,4 @@ ylabel('R')
 set(gca,'fontsize', 16)
 
 hold off
-
+%}
