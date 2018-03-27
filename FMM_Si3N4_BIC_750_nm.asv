@@ -5,13 +5,13 @@ allPlots = findall(0, 'Type', 'figure', 'FileName', []);
 delete(allPlots);
 
 N = 4;                  %number of Fourier orders
-period = 505;  %period of periodic layer
-w = 125;       %ridge width
+period = 500;  %period of periodic layer
+w = 15;       %ridge width
 L = 2;         %number of layers
 
 h = zeros(L,1);
 
-h(1) = 130;       %thickness of periodic layer
+h(1) = 100;       %thickness of periodic layer
 h(2) = 1000;
 
 
@@ -39,16 +39,16 @@ for i=1:M
 end
 refIndices = [1.0 nSi];     
 
-lmin = 730;
-lmax = 770;
-lambda = linspace(lmin, lmax, 301);
+lmin = 740;
+lmax = 745;
+lambda = linspace(lmin, lmax, 501);
 [Nll,Nl] = size(lambda);
 %theta = 0*pi/180;
 %Nt = 1;
 
 thetamin = 0*pi/180;
-thetamax= 1.0*pi/180;
-theta = linspace(thetamin, thetamax, 50);
+thetamax= 0.5*pi/180;
+theta = linspace(thetamin, thetamax, 200);
 [Ntt, Nt] = size(theta);
 
 
@@ -92,7 +92,7 @@ colormap('jet');
 colorbar;
 set(gca,'fontsize', 16)
 shading flat
-caxis([0 1])
+%caxis([0 1])
 colorbar
 hold off
 %{
