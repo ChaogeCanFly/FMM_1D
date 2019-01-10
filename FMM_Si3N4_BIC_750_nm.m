@@ -5,14 +5,18 @@ allPlots = findall(0, 'Type', 'figure', 'FileName', []);
 delete(allPlots);
 
 N = 4;                  %number of Fourier orders
-period = 505;  %period of periodic layer
-w = 125;       %ridge width
-L = 2;         %number of layers
+period = 500;  %period of periodic layer
+w = 100;       %ridge width
+L = 1;         %number of layers
 
 h = zeros(L,1);
 
-h(1) = 130;       %thickness of periodic layer
-h(2) = 1000;
+%{
+Glass (150 um)/SiNx (133 nm);
+%}
+
+h(1) = 133;       %thickness of periodic layer
+%h(2) = 1000;
 
 
 M = 5001;              
@@ -31,17 +35,17 @@ nSiO2 = 1.46;
 epsSiO2 = nSiO2^2;
 nSi = 3.71;
 epsilon(:,1)=epsSi3N4*ones(M,1);
-epsilon(:,2)=epsSiO2*ones(M,1);
+%epsilon(:,2)=epsSiO2*ones(M,1);
 for i=1:M    
     if x(i)<=w     
       epsilon(i,1) = 1.0;
     end
 end
-refIndices = [1.0 nSi];     
+refIndices = [1.0 nSiO2];     
 
 lmin = 730;
 lmax = 770;
-lambda = linspace(lmin, lmax, 301);
+lambda = linspace(lmin, lmax, 501);
 [Nll,Nl] = size(lambda);
 %theta = 0*pi/180;
 %Nt = 1;
@@ -95,6 +99,18 @@ shading flat
 caxis([0 1])
 colorbar
 hold off
+%{
+figure(2);
+pcolor(lambda,theta*180/pi,transpose(Rsum))
+xlabel('lambda, nm');
+ylabel('theta, deg');
+colormap('jet');
+colorbar;
+set(gca,'fontsize', 16)
+shading flat
+colorbar
+hold off
+%}
 %{
 c = physconst('LightSpeed');
 h = 4.135666 * 10^(-15);

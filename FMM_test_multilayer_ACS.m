@@ -1,7 +1,7 @@
 clc
 clear all
 
-N = 3;                %number of Fourier orders
+N = 5;                %number of Fourier orders
 period = 1000*(10^(-9));  %period of periodic layer
 d = 150*(10^(-9));     %ridge width
 h = zeros(3,1);
@@ -33,7 +33,7 @@ theta = zeros(100,1);
 %theta=zeros(90,1);
 %theta = 4*pi/180;
 %}
-lambda = linspace(1400,1500,50)*10^(-9);
+lambda = linspace(1400,1500,20)*10^(-9);
 [Nll,Nl] = size(lambda)
 theta = linspace(1,15,15)*pi/180;
 [Ntt, Nt] = size(theta)
@@ -49,6 +49,7 @@ for i=1:L
 end
 for i=1:Nl
     for j=1:Nt
+        i
     %lambda(i) = (1200+i*16)*(10^(-9))
     %theta(j) = (j/4)*pi/180;
     [beta1, eta_R1, eta_T1] = FMM_1D_TE_RT_multi(eps, period, h, lambda(i), theta(j), refIndices, N, M, L);

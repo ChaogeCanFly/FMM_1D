@@ -4,7 +4,7 @@ clear all
 N = 15;                %number of Fourier orders
 period = 480*(10^(-9));  %period of periodic layer
 w = 55*(10^(-9));     %ridge width
-L = 2;                 %number of layers
+L = 1;                 %number of layers
 h = zeros(L,1);
 %h(1) = 30*10^(-9);       %thickness of periodic layer
 %h(2) = 60*10^(-9);

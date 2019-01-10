@@ -1,14 +1,14 @@
 clc
 clear all
 
-N = 5;                %number of Fourier orders
+N = 35;                %number of Fourier orders
 period = 1000*(10^(-9));  %period of periodic layer
 d = 150*(10^(-9));     %ridge width
 h = zeros(3,1);
 h(1) = 3*10^(-6);
 h(2) = 350*(10^(-9));       %thickness of periodic layer
 h(3) = 1*10^(-6);
-M = 101;              %number of modes for Fourier transform of epsilon
+M = 1001;              %number of modes for Fourier transform of epsilon
 L = 3;                 %number of layers
 x = (1:1:M)*period/M;
 epsilon = zeros(M, L);
@@ -33,7 +33,7 @@ theta = zeros(100,1);
 %theta=zeros(90,1);
 %theta = 4*pi/180;
 %}
-lambda = linspace(1400,1500,50)*10^(-9);
+lambda = linspace(1400,1500,20)*10^(-9);
 [Nll,Nl] = size(lambda)
 theta = linspace(1,15,15)*pi/180;
 [Ntt, Nt] = size(theta)
