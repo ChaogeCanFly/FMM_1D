@@ -30,11 +30,11 @@ lmin = 710*10^(-9);
 lmax = 724*10^(-9);
 lambda = linspace(lmin, lmax, 56);
 [Nll,Nl] = size(lambda);
-%theta = 0*pi/180;
-%Nt = 1;
-thetamin = 12*pi/180;
-thetamax = 15*pi/180;
-theta = linspace(thetamin, thetamax,60);
+theta = 0*pi/180;
+Nt = 1;
+%thetamin = 12*pi/180;
+%thetamax = 15*pi/180;
+%theta = linspace(thetamin, thetamax,60);
 [Ntt, Nt] = size(theta);
 
 
