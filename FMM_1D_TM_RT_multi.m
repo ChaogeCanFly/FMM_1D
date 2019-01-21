@@ -25,7 +25,8 @@ pplus = zeros(2*N+1,2*N+1,L);
 pminus = zeros(2*N+1,2*N+1,L);
 
 for i=1:L
-    [betatemp,Wtemp,pplust,pminust] = FMM_1D_TM_RT_beta_e(eps(:,:,i), epsinv(:,:,i), period, h(i), lambda, theta, refIndices, N, M);
+    [betatemp,Wtemp,pplust,pminust] = FMM_1D_TM_RT_beta_e...
+        (eps(:,:,i), epsinv(:,:,i), period, h(i), lambda, theta, refIndices, N, M);
     beta(:,:,i) = betatemp;
     W(:,:,i) = Wtemp;
     pplus(:,:,i) = pplust;
