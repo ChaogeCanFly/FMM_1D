@@ -4,15 +4,16 @@
 
 %load('5_layers_05_to_15.mat','data')
 %N=length(data(1,:))
+R=Rsum
 N = length(R);
 
 %thetamin = 0.5;
 %thetamax = 5;
 %theta_full = linspace(thetamin,thetamax,10);
 
-xxdata=lambda;
-left = 0.79;
-right = 0.81;
+xxdata=lambda*10^6;
+left = 0.7271;
+right = 0.7279;
 [elem,num_elem]=min(abs(xxdata-left));
 [elem2,num_elem_2]=min(abs(xxdata-right));
 
@@ -25,9 +26,9 @@ deriv = diff(ydata)./diff(xdata);
     [~,ind]= min(deriv);
     center = xdata(ind);
     
-    width = 0.001;
-    q = -100;
-    H = 0.1;
+    width = 0.0001;
+    q = 2;
+    H = 0.9;
     A = 0;
     B = 0;%-13.3;
     C = 0;

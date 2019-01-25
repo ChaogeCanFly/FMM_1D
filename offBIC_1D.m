@@ -7,12 +7,12 @@ h = zeros(L,1);
 th = 212*10^(-9);
 h(1) = th;
 period = 1.8*th;  %period of periodic layer
-w = 0.45*period;     %ridge width
+w = 0.7*period;     %ridge width
 
 M = 5001;              %number of modes for Fourier transform of epsilon
 x = (1:1:M)*period/M;
 epsilon = zeros(M, L);
-nlattice = 2.08;
+nlattice = 1.88;
 epslattice = nlattice^2;
 nmedia = 1.46;
 epsmedia = nmedia^2;
@@ -26,17 +26,18 @@ for i=1:M
     end
 end
 
-lmin = 710*10^(-9);
-lmax = 724*10^(-9);
-lambda = linspace(lmin, lmax, 56);
+lmin = 727*10^(-9);
+lmax = 728*10^(-9);
+lambda = linspace(lmin, lmax, 500);
 [Nll,Nl] = size(lambda);
 theta = 0*pi/180;
 %Nt = 20;
-thetamin = 12*pi/180;
-thetamax = 15*pi/180;
-theta = linspace(thetamin, thetamax,60);
-[Ntt, Nt] = size(theta);
-
+%thetamin = 12*pi/180;
+%thetamax = 24*pi/180;
+%theta = linspace(thetamin, thetamax,60);
+%[Ntt, Nt] = size(theta);
+theta=14*pi/180;
+Nt=1;
 
 phi = 0*pi/180;
 Rsum=zeros(Nl,Nt);
@@ -58,6 +59,10 @@ for i=1:Nl
     end
     end
 end
+figure;
+plot(lambda,Rsum,'r','Linewidth',2)
+hold off
+%{
 XI = lambda;
 YI = theta*180/pi;
 ZI = transpose(Rsum);
@@ -68,4 +73,4 @@ colormap('jet');
 colorbar;
 %caxis([0 0.4])
 hold off
-
+%}
