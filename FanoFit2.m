@@ -12,23 +12,23 @@ N = length(R);
 %theta_full = linspace(thetamin,thetamax,10);
 
 xxdata=lambda*10^6;
-left = 0.7271;
-right = 0.7279;
+left = min(xxdata);
+right = max(xxdata);
 [elem,num_elem]=min(abs(xxdata-left));
 [elem2,num_elem_2]=min(abs(xxdata-right));
 
 
 
-xdata = transpose(lambda(num_elem:num_elem_2));
+xdata = transpose(xxdata(num_elem:num_elem_2));
 ydata=R(num_elem:num_elem_2)-min(R(num_elem:num_elem_2));
 
 deriv = diff(ydata)./diff(xdata);
     [~,ind]= min(deriv);
     center = xdata(ind);
     
-    width = 0.0001;
-    q = 2;
-    H = 0.9;
+    width = 0.0005;
+    q = 100;
+    H = 1;
     A = 0;
     B = 0;%-13.3;
     C = 0;
@@ -44,6 +44,10 @@ x=lsqcurvefit(Fano,x0,xdata,ydata);
   plot(xdata,ydata,'-k',xdata,Fano(x,xdata),'-r');
   hold off
   Q = abs(x(1)/x(2));
+  x0 = x(1);
+  w = x(2);
+  q = x(3);
+  H = x(4);
 
 
 %g=figure
@@ -51,6 +55,6 @@ x=lsqcurvefit(Fano,x0,xdata,ydata);
 %theta(i) = theta_full(i);
 %save('5_layers_05_to_15_results.mat','theta_full','Q','i')
 %end
-theta_Q = theta1(13);
+%theta_Q = theta1(13);
 %save('2_08_a_th_1.8_Q.mat','theta_Q','Q');
 

@@ -26,8 +26,8 @@ for i=1:M
     end
 end
 
-lmin = 727*10^(-9);
-lmax = 728*10^(-9);
+lmin = 709*10^(-9);
+lmax = 711*10^(-9);
 lambda = linspace(lmin, lmax, 500);
 [Nll,Nl] = size(lambda);
 theta = 0*pi/180;
@@ -36,7 +36,7 @@ theta = 0*pi/180;
 %thetamax = 24*pi/180;
 %theta = linspace(thetamin, thetamax,60);
 %[Ntt, Nt] = size(theta);
-theta=14*pi/180;
+theta=12*pi/180;
 Nt=1;
 
 phi = 0*pi/180;
