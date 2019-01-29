@@ -2,11 +2,16 @@
 clc;
 clear all;
 %% initializations
-Nt = 40;
+Nt = 50;
 Nl = 50;
+wmin = 350*10^12;
+wmax = 270*10^12;
+c = 3*10^8;
+lmin = c/wmin*10^6;
+lmax = c/wmax*10^6;
 wll = linspace(0.71,0.724,Nl); % wavelength
-theta_min = 12*pi/180;
-theta_max = 15*pi/180;
+theta_min = 19*pi/180;
+theta_max = 89*pi/180;
 theta = linspace(theta_min,theta_max,Nt);
 kxx0 = zeros(Nt,1);
 for j=1:Nt
